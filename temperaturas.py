@@ -1,4 +1,6 @@
 from paho.mqtt.client import Client
+from time import sleep
+from random import random, randint
 import sys
 
 def on_message(client, userdata, msg):
@@ -6,9 +8,9 @@ def on_message(client, userdata, msg):
         topic = msg.topic
         t = float(msg.payload)
         if topic in userdata.keys():
-            userdata['topic'].append(n)
+            userdata['topic'].append(t)
         else:
-            userdata['topic'] = [n]
+            userdata['topic'] = [t]
     except ValueError:
         pass
     except Exception as e:
@@ -21,7 +23,7 @@ def main(broker):
 
     print(f'Connecting on temperature channels on {broker}')
     client.connect(broker)
-    client.subscribe('temperature/#')
+    client.subscribe("temperature/#")
     client.loop_forever()
 
     while True:
@@ -38,7 +40,9 @@ def main(broker):
             temps = []
         n = media(temps_total)
         print(f'La temperatura media total es {n}')
-        sleep(randon()*8)
+        userdata = {}
+        sleep(random()*8)
+        
 
 def media(lst):
     m = 0
